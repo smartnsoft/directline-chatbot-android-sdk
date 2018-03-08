@@ -1,4 +1,4 @@
-package com.smartnsoft.qnachatbot;
+package com.smartnsoft.directlinechatbotapp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

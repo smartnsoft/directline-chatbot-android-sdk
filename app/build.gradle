@@ -1,31 +1,42 @@
-apply plugin: 'com.android.application'
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
 
-apply plugin: 'kotlin-android'
+android
+{
+  compileSdkVersion 27
 
-apply plugin: 'kotlin-android-extensions'
+  defaultConfig
+  {
+    applicationId "com.smartnsoft.qnachatbot"
+    final def baseVersionName = "0.1"
 
-android {
-    compileSdkVersion 27
-    defaultConfig {
-        applicationId "com.smartnsoft.qnachatbot"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 1
-        versionName "0.1"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    minSdkVersion 16
+    targetSdkVersion 27
+
+    versionCode 1
+    versionName baseVersionName
+  }
+
+  buildTypes
+  {
+    release
+    {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
+
+  sourceSets
+  {
+    main.java.srcDirs += "src/main/kotlin"
+  }
 }
 
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation project(':directline-chatbot-sdk')
+dependencies
+{
+  implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlin_version}")
+  implementation("com.android.support:appcompat-v7:27.1.0")
+  implementation("com.android.support.constraint:constraint-layout:1.0.2")
+  implementation project(":directline-chatbot-sdk")
 }

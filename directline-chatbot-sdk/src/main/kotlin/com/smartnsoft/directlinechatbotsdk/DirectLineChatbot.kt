@@ -48,9 +48,12 @@ import java.net.URI
  * @since 2018.03.06
  */
 
-class DirectLineChatbot(val secret: String) {
+class DirectLineChatbot(val secret: String)
+{
 
-  interface Callback {
+  interface Callback
+  {
+
     /**
      * Gets called when a successful connection has been made with the chatbot
      */
@@ -84,13 +87,41 @@ class DirectLineChatbot(val secret: String) {
   private var id = ID(user)
 
   /**
+   * Sends asynchronously a text message to the chatbot.
+   */
+  fun send(message: String)
+  {
+    conversationId?.let {
+      val messageObj = Message("message", id, message)
+      WebService.api.send(messageObj, it, header).enqueue(object : retrofit2.Callback<ID>
+      {
+        override fun onResponse(call: Call<ID>?, response: Response<ID>?)
+        {
+          response?.body()?.let { body ->
+            log("MESSAGE \"${message}\" SENT SUCCESSFULLY")
+          }
+        }
+
+        override fun onFailure(call: Call<ID>?, t: Throwable?)
+        {
+          t?.printStackTrace()
+        }
+      })
+    }
+        ?: throw IllegalStateException("The DirectLineChatbot must be initialized first. Call start().")
+  }
+
+  /**
    * Starts asynchronously a WebSocket connection with the Microsoft Web App Bot.
    * When started, the onStarted() method from the @callback will be called.
    */
-  fun start(callback: Callback) {
+  fun start(callback: Callback)
+  {
     this.callback = callback
-    WebService.api.startConversation(header).enqueue(object : retrofit2.Callback<StartConversation> {
-      override fun onResponse(call: Call<StartConversation>?, response: Response<StartConversation>?) {
+    WebService.api.startConversation(header).enqueue(object : retrofit2.Callback<StartConversation>
+    {
+      override fun onResponse(call: Call<StartConversation>?, response: Response<StartConversation>?)
+      {
         response?.body()?.let { body ->
           body.streamUrl.let { streamUrl ->
             log(streamUrl)
@@ -100,7 +131,8 @@ class DirectLineChatbot(val secret: String) {
         }
       }
 
-      override fun onFailure(call: Call<StartConversation>?, t: Throwable?) {
+      override fun onFailure(call: Call<StartConversation>?, t: Throwable?)
+      {
         t?.printStackTrace()
       }
     })
@@ -110,44 +142,37 @@ class DirectLineChatbot(val secret: String) {
    * Closes the WebSocket of the Web App Bot.
    * Any further call to send() method will throw an exception
    */
-  fun stop() {
+  fun stop()
+  {
     conversationId = null;
     webSocket?.close();
   }
 
-  /**
-   * Sends asynchronously a text message to the chatbot.
-   */
-  fun send(message: String){
-    conversationId?.let {
-      val messageObj = Message("message", id, message)
-      WebService.api.send(messageObj, it, header).enqueue(object : retrofit2.Callback<ID> {
-        override fun onResponse(call: Call<ID>?, response: Response<ID>?) {
-          response?.body()?.let { body ->
-            log("MESSAGE \"${message}\" SENT SUCCESSFULLY")
-          }
-        }
-
-        override fun onFailure(call: Call<ID>?, t: Throwable?) {
-          t?.printStackTrace()
-        }
-      })
+  private fun log(log: String)
+  {
+    if (debug)
+    {
+      Log.d("WEB SOCKET", log)
     }
-    ?: throw IllegalStateException("The DirectLineChatbot must be initialized first. Call start().")
   }
 
-  private fun startWebSocket(streamUrl: String) {
-    webSocket = object : WebSocketClient(URI.create(streamUrl)) {
-      override fun onOpen(handshakedata: ServerHandshake?) {
+  private fun startWebSocket(streamUrl: String)
+  {
+    webSocket = object : WebSocketClient(URI.create(streamUrl))
+    {
+      override fun onOpen(handshakedata: ServerHandshake?)
+      {
         log("OPEN")
         callback?.onStarted()
       }
 
-      override fun onClose(code: Int, reason: String?, remote: Boolean) {
+      override fun onClose(code: Int, reason: String?, remote: Boolean)
+      {
         log("CLOSE")
       }
 
-      override fun onMessage(message: String?) {
+      override fun onMessage(message: String?)
+      {
         log("MESSAGE RECEIVED : ${message}")
         val messageReceived = Gson().fromJson(message, MessageReceived::class.java)
         messageReceived?.watermark?.let {
@@ -155,16 +180,11 @@ class DirectLineChatbot(val secret: String) {
         }
       }
 
-      override fun onError(ex: Exception?) {
+      override fun onError(ex: Exception?)
+      {
         log("ERROR : ${ex?.message}")
       }
     }
     webSocket?.connect()
-  }
-
-  private fun log(log: String) {
-    if (debug) {
-      Log.d("WEB SOCKET", log)
-    }
   }
 }

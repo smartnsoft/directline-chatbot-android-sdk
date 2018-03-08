@@ -1,4 +1,4 @@
-package com.smartnsoft.qnachatbot
+package com.smartnsoft.directlinechatbotapp
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,9 +12,12 @@ import com.smartnsoft.directlinechatbotsdk.DirectLineChatbot
  * @since 2018.03.06
  */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity :
+    AppCompatActivity()
+{
 
-  override fun onCreate(savedInstanceState: Bundle?) {
+  override fun onCreate(savedInstanceState: Bundle?)
+  {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
@@ -22,12 +25,15 @@ class MainActivity : AppCompatActivity() {
     chatbot.debug = true
     chatbot.user = "David Fournier"
 
-    chatbot.start(callback = object: DirectLineChatbot.Callback {
-      override fun onStarted() {
+    chatbot.start(callback = object : DirectLineChatbot.Callback
+    {
+      override fun onStarted()
+      {
         chatbot.send("Bonjour !")
       }
 
-      override fun onMessageReceived(message: String) {
+      override fun onMessageReceived(message: String)
+      {
         Log.d("CHATBOT", message)
       }
     })

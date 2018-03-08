@@ -84,4 +84,4 @@ This SDK is under the MIT license.
 
 ## Author
 
-This SDK has been made by David Fournier @ [Smart and Soft](https://smartnsoft.com/)
+This SDK was proudly made by [Smart&Soft](https://smartnsoft.com/), Paris FRANCE

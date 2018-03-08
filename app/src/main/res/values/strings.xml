@@ -1,0 +1,6 @@
+<resources>
+  <string name="app_name">DirectLine Chatbot SDK</string>
+  <string name="description">This is a minimal example of an integration of the DirectLine API into Android. Please see
+    logs to watch bot responses. Feel free to create your own UI around the chatbot.
+  </string>
+</resources>

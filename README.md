@@ -35,7 +35,7 @@ chatbot.start(new DirectLineChatbot.Callback()
   @Override
   public void onStarted()
   {
-    Log.d("CHATBOT", "Started);
+    Log.d("CHATBOT", "Started");
   }
 
   @Override

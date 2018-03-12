@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2018 Smart&Soft
+// Copyright (c) 2017 Smart&Soft
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,31 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package com.smartnsoft.directlinechatbotsdk.ws
-
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
-
 /**
+ * Contains the Microsoft Azuez Direct Line Android SDK
+ *
  * @author David Fournier
- * @since 2018.03.05
+ * @since 2018.03.12
  */
-internal object WebService {
-
-  val api by lazy {
-    create()
-  }
-
-  private fun create(): API = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
-        .baseUrl("https://directline.botframework.com/v3/directline/")
-        .client(OkHttpClient.Builder()
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .writeTimeout(1, TimeUnit.MINUTES)
-            .readTimeout(1, TimeUnit.MINUTES)
-            .build())
-        .build()
-        .create(API::class.java)
-
-}
+package com.smartnsoft.directlinechatbot;

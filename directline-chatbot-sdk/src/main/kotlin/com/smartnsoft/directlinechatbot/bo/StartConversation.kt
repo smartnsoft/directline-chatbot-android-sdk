@@ -20,23 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package com.smartnsoft.directlinechatbotsdk.bo
+package com.smartnsoft.directlinechatbot.bo
+
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * @author David Fournier
- * @since 2018.03.06
+ * @since 2018.03.05
  */
-internal data class Activity(
-    val type: String,
-    val id: String,
-    val timestamp: String,
-    val localTimestamp: String,
-    val channelId: String,
-    val from: ID,
-    val conversation: ID,
-    val text: String,
-    val inputHint: String,
-    val replyToId: String) {
-
-
-}
+internal data class StartConversation(val conversationId: String,
+                                      val token: String,
+                                      @SerializedName("expires_in")
+                                      val expiresIn: Long,
+                                      val streamUrl: String)
+  : Serializable

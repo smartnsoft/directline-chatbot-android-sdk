@@ -20,15 +20,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package com.smartnsoft.directlinechatbotsdk
+package com.smartnsoft.directlinechatbot
 
 import android.util.Log
 import com.google.gson.Gson
-import com.smartnsoft.directlinechatbotsdk.bo.ID
-import com.smartnsoft.directlinechatbotsdk.bo.Message
-import com.smartnsoft.directlinechatbotsdk.bo.MessageReceived
-import com.smartnsoft.directlinechatbotsdk.bo.StartConversation
-import com.smartnsoft.directlinechatbotsdk.ws.WebService
+import com.smartnsoft.directlinechatbot.bo.Id
+import com.smartnsoft.directlinechatbot.bo.Message
+import com.smartnsoft.directlinechatbot.bo.MessageReceived
+import com.smartnsoft.directlinechatbot.bo.StartConversation
+import com.smartnsoft.directlinechatbot.ws.WebService
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 import retrofit2.Call
@@ -66,6 +66,13 @@ class DirectLineChatbot(val secret: String)
     fun onMessageReceived(message: String)
   }
 
+   companion object
+   {
+     private const val TAG = "WEB SOCKET"
+
+     private val GSON = Gson()
+   }
+
   /**
    * The user name as sent to the chatbot
    */
@@ -84,7 +91,7 @@ class DirectLineChatbot(val secret: String)
 
   private var header: String = "Bearer ${secret}"
 
-  private var id = ID(user)
+  private var id = Id(user)
 
   /**
    * Sends asynchronously a text message to the chatbot.
@@ -93,16 +100,16 @@ class DirectLineChatbot(val secret: String)
   {
     conversationId?.let {
       val messageObj = Message("message", id, message)
-      WebService.api.send(messageObj, it, header).enqueue(object : retrofit2.Callback<ID>
+      WebService.api.send(messageObj, it, header).enqueue(object : retrofit2.Callback<Id>
       {
-        override fun onResponse(call: Call<ID>?, response: Response<ID>?)
+        override fun onResponse(call: Call<Id>?, response: Response<Id>?)
         {
-          response?.body()?.let { body ->
+          response?.body()?.let { _ ->
             log("MESSAGE \"${message}\" SENT SUCCESSFULLY")
           }
         }
 
-        override fun onFailure(call: Call<ID>?, t: Throwable?)
+        override fun onFailure(call: Call<Id>?, t: Throwable?)
         {
           t?.printStackTrace()
         }
@@ -152,7 +159,7 @@ class DirectLineChatbot(val secret: String)
   {
     if (debug)
     {
-      Log.d("WEB SOCKET", log)
+      Log.d(TAG, log)
     }
   }
 
@@ -174,7 +181,7 @@ class DirectLineChatbot(val secret: String)
       override fun onMessage(message: String?)
       {
         log("MESSAGE RECEIVED : ${message}")
-        val messageReceived = Gson().fromJson(message, MessageReceived::class.java)
+        val messageReceived = GSON.fromJson(message, MessageReceived::class.java)
         messageReceived?.watermark?.let {
           callback?.onMessageReceived(messageReceived.activities[0].text)
         }
@@ -182,7 +189,7 @@ class DirectLineChatbot(val secret: String)
 
       override fun onError(ex: Exception?)
       {
-        log("ERROR : ${ex?.message}")
+        Log.e(TAG, ex?.message)
       }
     }
     webSocket?.connect()

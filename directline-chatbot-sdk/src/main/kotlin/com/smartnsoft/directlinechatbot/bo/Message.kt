@@ -20,24 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package com.smartnsoft.directlinechatbotsdk.ws
+package com.smartnsoft.directlinechatbot.bo
 
-import com.smartnsoft.directlinechatbotsdk.bo.ID
-import com.smartnsoft.directlinechatbotsdk.bo.Message
-import com.smartnsoft.directlinechatbotsdk.bo.StartConversation
-import retrofit2.Call
-import retrofit2.http.*
+import java.io.Serializable
 
 /**
  * @author David Fournier
  * @since 2018.03.05
  */
-internal interface API {
 
-  @POST("conversations")
-  fun startConversation(@Header("Authorization") secret: String): Call<StartConversation>
-
-  @POST("conversations/{conversationId}/activities")
-  fun send(@Body message: Message, @Path("conversationId") conversationId: String, @Header("Authorization") secret: String): Call<ID>
-
-}
+internal data class Message (val type: String,
+                             val from: Id,
+                             val text: String)
+  : Serializable

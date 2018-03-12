@@ -20,14 +20,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package com.smartnsoft.directlinechatbotsdk.bo
+package com.smartnsoft.directlinechatbot.ws
+
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /**
  * @author David Fournier
  * @since 2018.03.05
  */
+internal object WebService
+{
 
-internal data class Message (
-    val type: String,
-    val from: ID,
-    val text: String)
+  val api by lazy {
+    create()
+  }
+
+  private fun create(): API =
+      Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+          .baseUrl("https://directline.botframework.com/v3/directline/")
+          .client(OkHttpClient.Builder()
+              .connectTimeout(1, TimeUnit.MINUTES)
+              .writeTimeout(1, TimeUnit.MINUTES)
+              .readTimeout(1, TimeUnit.MINUTES)
+              .build())
+          .build()
+          .create(API::class.java)
+
+}

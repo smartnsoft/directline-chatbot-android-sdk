@@ -1,28 +1,35 @@
 buildscript
 {
   ext.kotlin_version = "1.2.21"
-    repositories
-    {
-        google()
-        jcenter()
-    }
+  repositories
+  {
+    google()
+    jcenter()
+  }
 
-    dependencies
-    {
-        classpath("com.android.tools.build:gradle:3.0.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}")
-    }
+  dependencies
+  {
+    classpath("com.android.tools.build:gradle:3.0.1")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}")
+    classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3")
+  }
 }
 
 allprojects
 {
-    repositories
-    {
-        google()
-        jcenter()
-    }
+  repositories
+  {
+    google()
+    jcenter()
+  }
+
+  tasks.withType(Javadoc)
+  {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+  }
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+  delete rootProject.buildDir
 }

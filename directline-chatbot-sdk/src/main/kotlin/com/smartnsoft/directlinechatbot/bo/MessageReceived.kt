@@ -20,14 +20,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package com.smartnsoft.directlinechatbotsdk.bo
+package com.smartnsoft.directlinechatbot.bo
+
+import java.io.Serializable
 
 /**
  * @author David Fournier
- * @since 2018.03.05
+ * @since 2018.03.06
  */
-data class StartConversation(
-    val conversationId: String,
-    val token: String,
-    val expires_in: Long,
-    val streamUrl: String)
+internal data class MessageReceived(val activities: List<MessageActivity>,
+                                    val watermark: String)
+  : Serializable

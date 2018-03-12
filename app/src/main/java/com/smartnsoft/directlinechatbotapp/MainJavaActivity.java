@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.smartnsoft.directlinechatbotsdk.DirectLineChatbot;
+import com.smartnsoft.directlinechatbot.DirectLineChatbot;
 import org.jetbrains.annotations.NotNull;
 
 /**

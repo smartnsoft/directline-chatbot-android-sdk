@@ -3,7 +3,7 @@ package com.smartnsoft.directlinechatbotapp
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.smartnsoft.directlinechatbotsdk.DirectLineChatbot
+import com.smartnsoft.directlinechatbot.DirectLineChatbot
 
 /**
  * A minimal Kotlin Activity example to run DirectLineChatbot
@@ -38,6 +38,5 @@ class MainActivity :
       }
     })
   }
-
 
 }

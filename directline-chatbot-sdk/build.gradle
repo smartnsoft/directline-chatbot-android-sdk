@@ -1,5 +1,8 @@
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
+apply plugin: "com.jfrog.bintray"
+apply plugin: "maven"
+apply plugin: "maven-publish"
 
 android
 {
@@ -40,3 +43,137 @@ dependencies
   implementation("com.squareup.retrofit2:retrofit:2.3.0")
   implementation("com.squareup.retrofit2:converter-gson:2.3.0")
 }
+
+task sourcesJar(type: Jar) {
+  classifier = "sources"
+  from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+  title = "Direct Line Android SDK"
+  description "Javadoc for the Direct Line Android SDK"
+  source = android.sourceSets.main.java.srcDirs
+
+  options.charSet = "UTF-8"
+  options.overview = "src/main/javadoc/overview.html"
+  options.links = ["http://docs.oracle.com/javase/7/docs/api/", "http://d.android.com/reference/"]
+
+  classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+  failOnError = false
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = "javadoc"
+  from javadoc.destinationDir
+}
+
+artifacts
+{
+  archives javadocJar
+  archives sourcesJar
+}
+
+def pomConfig = {
+  licenses
+  {
+    license
+    {
+      name "MIT License (MIT)"
+      url "https://opensource.org/licenses/MIT"
+      distribution "repo"
+    }
+  }
+}
+
+publishing
+{
+  publications
+  {
+    ReleasePublication(MavenPublication)
+    {
+      artifact sourcesJar
+      artifact javadocJar
+      groupId "com.smartnsoft"
+      artifactId "directlinechatbot"
+      version android.defaultConfig.versionName
+
+      pom.withXml
+      {
+        def root = asNode()
+        root.appendNode("description", "A minimalistic SDK to connect directly a Microsoft Azure Web App Bot into an Android App.")
+        root.appendNode("name", "directlinechatbot")
+        root.appendNode("url", "https://github.com/smartnsoft/directline-chatbot-android-sdk")
+        root.children().last() + pomConfig
+      }
+    }
+  }
+}
+
+//https://gist.github.com/bugs84/b7887fb5d7f9f2d484b8
+publishing.publications.all
+{
+  pom.withXml
+  {
+    asNode().dependencies."*".findAll()
+    {
+      it.scope.text() == "runtime" && project.configurations.compile.allDependencies.find { dep ->
+        dep.name == it.artifactId.text()
+      }
+    }.each
+    {
+      it.scope*.value = "compile"
+    }
+  }
+}
+
+bintray
+{
+  publications = ["ReleasePublication"]
+
+  pkg
+  {
+    repo = "maven"
+    name = "directlinechatbot"
+    userOrg = "smartnsoft"
+    licenses = ["MIT"]
+    vcsUrl = "https://github.com/smartnsoft/directline-chatbot-android-sdk.git"
+    publish = true
+
+    version
+    {
+      name = android.defaultConfig.versionName
+      desc = "A minimalistic SDK to connect directly a Microsoft Azure Web App Bot into an Android App."
+      released = new Date()
+      vcsTag = "v" + android.defaultConfig.versionName
+    }
+  }
+}
+
+uploadArchives
+{
+  repositories
+  {
+    mavenDeployer
+    {
+      repository(url: "https://api.bintray.com/maven/smartnsoft/maven/directlinechatbot/;publish=1")
+      {
+        authentication(userName: bintrayUsername, password: bintrayKey)
+      }
+
+      snapshotRepository(url: nexusSnapshotUrl)
+      {
+        authentication(userName: nexusUsername, password: nexusPassword)
+      }
+
+      pom.project
+      {
+        name "directlinechatbot"
+        groupId "com.smartnsoft"
+        artifactId "directlinechatbot"
+        version android.defaultConfig.versionName
+        packaging "aar"
+      }
+    }
+  }
+}
+

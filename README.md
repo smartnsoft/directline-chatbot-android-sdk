@@ -75,7 +75,7 @@ chatbot.setDebug(true);
 ### Gradle
 
 ```groovy
-implementation("com.smartnsoft:monerominer:0.1")
+implementation("com.smartnsoft:directlinechatbot:0.1")
 ```
 
 ## Further improvements

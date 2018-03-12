@@ -70,6 +70,14 @@ If you want debug logs, use the `setDebug(boolean) method`
 chatbot.setDebug(true);
 ```
 
+## Download
+
+### Gradle
+
+```groovy
+implementation("com.smartnsoft:monerominer:0.1")
+```
+
 ## Further improvements
 
 For now, the SDK only handles text messages. Further improvements will include other types of messages to communicate with the Web App Bot.

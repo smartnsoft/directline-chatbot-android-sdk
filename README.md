@@ -1,5 +1,6 @@
 [ ![Download](https://api.bintray.com/packages/smartnsoft/maven/directlinechatbot/images/download.svg) ](https://bintray.com/smartnsoft/maven/directlinechatbot/_latestVersion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TeamCity status](https://ci.smartnsoft.com/app/rest/builds/buildType(id:Lab_DirectLineChatbotAndroidSdk)/statusIcon)](https://ci.smartnsoft.com/viewType.html?buildTypeId=Lab_DirectLineChatbotAndroidSdk)
 
 # directline-chatbot-sdk
 

@@ -2,6 +2,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TeamCity status](https://ci.smartnsoft.com/app/rest/builds/buildType(id:Lab_DirectLineChatbotAndroidSdk)/statusIcon)](https://ci.smartnsoft.com/viewType.html?buildTypeId=Lab_DirectLineChatbotAndroidSdk)
 
+<img width=100% src="./assets/logo.png">
+
 # directline-chatbot-sdk
 
 A first attempt to create a simple SDK to connect directly a Microsoft Azure Web App Bot into an Android App.

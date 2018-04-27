@@ -93,29 +93,34 @@ class DirectLineChatbot(val secret: String)
 
   private var id = Id(user)
 
+  private var started = false
+
   /**
    * Sends asynchronously a text message to the chatbot.
    */
   fun send(message: String)
   {
     conversationId?.let {
-      val messageObj = Message("message", id, message)
-      WebService.api.send(messageObj, it, header).enqueue(object : retrofit2.Callback<Id>
-      {
-        override fun onResponse(call: Call<Id>?, response: Response<Id>?)
+        val messageObj = Message("message", id, message)
+        WebService.api.send(messageObj, it, header).enqueue(object : retrofit2.Callback<Id>
         {
-          response?.body()?.let { _ ->
-            log("MESSAGE \"${message}\" SENT SUCCESSFULLY")
+          override fun onResponse(call: Call<Id>?, response: Response<Id>?)
+          {
+            response?.body()?.let { _ ->
+              log("MESSAGE \"${message}\" SENT SUCCESSFULLY")
+            }
           }
-        }
 
-        override fun onFailure(call: Call<Id>?, t: Throwable?)
-        {
-          t?.printStackTrace()
-        }
-      })
+          override fun onFailure(call: Call<Id>?, t: Throwable?)
+          {
+            t?.printStackTrace()
+          }
+        })
     }
-        ?: throw IllegalStateException("The DirectLineChatbot must be initialized first. Call start().")
+        ?: if (started)
+          throw IllegalStateException("The DirectLineChatbot has not finished its initialization yet. Please wait for onStarted() to be triggered.")
+        else
+          throw IllegalStateException("The DirectLineChatbot must be initialized first. Call start().")
   }
 
   /**
@@ -125,6 +130,7 @@ class DirectLineChatbot(val secret: String)
   fun start(callback: Callback)
   {
     this.callback = callback
+    this.started = true
     WebService.api.startConversation(header).enqueue(object : retrofit2.Callback<StartConversation>
     {
       override fun onResponse(call: Call<StartConversation>?, response: Response<StartConversation>?)

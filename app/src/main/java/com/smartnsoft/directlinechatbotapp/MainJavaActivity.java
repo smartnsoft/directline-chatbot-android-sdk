@@ -43,7 +43,7 @@ public class MainJavaActivity
       }
 
       @Override
-      public void onMessageReceived(@NotNull String message) {
+      public void onMessageReceived(@NotNull MessageActivity message) {
         Log.d("CHATBOT", message);
       }
 

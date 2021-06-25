@@ -5,6 +5,7 @@ buildscript
   {
     google()
     jcenter()
+    maven { url "https://jitpack.io" }
   }
 
   dependencies
@@ -21,6 +22,7 @@ allprojects
   {
     google()
     jcenter()
+    maven { url "https://jitpack.io" }
   }
 
   tasks.withType(Javadoc)

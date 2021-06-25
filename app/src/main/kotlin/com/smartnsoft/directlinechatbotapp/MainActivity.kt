@@ -32,9 +32,17 @@ class MainActivity :
         chatbot.send("Bonjour !")
       }
 
+      override fun onClosed() {
+        Log.d("CHATBOT", "Socket Closed")
+      }
+
       override fun onMessageReceived(message: String)
       {
         Log.d("CHATBOT", message)
+      }
+
+      override fun onErrorReceived(error: String) {
+        Log.e("CHATBOT", error)
       }
     })
   }

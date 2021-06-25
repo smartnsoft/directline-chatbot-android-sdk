@@ -60,10 +60,22 @@ class DirectLineChatbot(val secret: String)
     fun onStarted()
 
     /**
-     * Gets called every time a message *from the bot* has been received
-     * @message: the text message from the chatbot
+     * Gets called when a not-successful connection has been made with the chatbot
      */
-    fun onMessageReceived(message: String)
+    fun onClosed()
+
+    /**
+     * Gets called every time a message *from the bot* has been received
+     * @message: the MessageActivity from the chatbot
+     */
+    fun onMessageReceived(message: MessageActivity)
+
+    /**
+     * Gets called every time a message *from the bot* has been received
+     * @error: the text message from error exception
+     */
+    fun onErrorReceived(error: String)
+
   }
 
    companion object
@@ -176,6 +188,7 @@ class DirectLineChatbot(val secret: String)
       override fun onClose(code: Int, reason: String?, remote: Boolean)
       {
         log("CLOSE")
+        callback.onClosed()
       }
 
       override fun onMessage(message: String?)
@@ -183,13 +196,14 @@ class DirectLineChatbot(val secret: String)
         log("MESSAGE RECEIVED : ${message}")
         val messageReceived = GSON.fromJson(message, MessageReceived::class.java)
         messageReceived?.watermark?.let {
-          callback?.onMessageReceived(messageReceived.activities[0].text)
+          callback?.onMessageReceived(messageReceived.activities[0])
         }
       }
 
       override fun onError(ex: Exception?)
       {
-        Log.e(TAG, ex?.message)
+        Log.e(TAG, ex?.message?)
+        callback.onErrorReceived(ex.message?: "ERROR")
       }
     }
     webSocket?.connect()

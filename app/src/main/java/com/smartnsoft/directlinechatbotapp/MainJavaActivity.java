@@ -38,9 +38,18 @@ public class MainJavaActivity
       }
 
       @Override
-      public void onMessageReceived(@NotNull String message)
-      {
+      public void onClosed() {
+        Log.d("CHATBOT","Socket Closed")
+      }
+
+      @Override
+      public void onMessageReceived(@NotNull String message) {
         Log.d("CHATBOT", message);
+      }
+
+      @Override
+      public void onErrorReceived(String error) {
+        Log.e("CHATBOT", error)
       }
     });
   }

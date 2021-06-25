@@ -36,6 +36,7 @@ internal data class MessageActivity(val type: String,
                                     val from: Id,
                                     val conversation: Id,
                                     val text: String,
+                                    val speak: String?,
                                     val inputHint: String,
                                     val replyToId: String)
   : Serializable
